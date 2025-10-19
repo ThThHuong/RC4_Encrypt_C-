@@ -6,7 +6,7 @@ RC4::RC4(unsigned char* key, int keylen) {
     for (int i = 0; i < 256; i++) {
         j = (j + S[i] + key[i % keylen]) & 255;
         std::swap(S[i], S[j]);
-    }
+    } 
 }
 
 void RC4::crypt(unsigned char* data, int len) {
