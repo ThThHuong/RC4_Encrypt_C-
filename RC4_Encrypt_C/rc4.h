@@ -1,4 +1,6 @@
 #pragma once
+#include <algorithm>
+
 class RC4 {
 private:
     unsigned char S[256];
