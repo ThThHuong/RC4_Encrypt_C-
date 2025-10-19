@@ -1,16 +1,16 @@
 
-# 🔐 RC4 Encryption & Decryption in C++
+#  RC4 Encryption & Decryption in C++
 
 This repository implements RC4 encryption and decryption using C++.
 
 ---
 
-## 📁 Folder structure
+##  Folder structure
 
 
 ---
 
-## ⚙️ Compile
+##  Compile
 ```bash
 cd RC4_Encrypt_C
 g++ main.cpp rc4.cpp -o encrypt
