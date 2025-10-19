@@ -1,28 +1,39 @@
-#include <stdio.h>     
-#include <stdlib.h>
-#include <string.h>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
 #include "rc4.h"
-int main() {
-    const char *key = "mysecretkey";  
-    const char *plaintext = "Hanoi University of Science and Technology";
-    size_t textlen = strlen(plaintext);
-    unsigned char *cipher = (unsigned char *)malloc(textlen);
-    if (!cipher) {
-        fprintf(stderr, "Memory allocation failed\n");
+using namespace std;
+
+int main(int argc, char* argv[]) {
+    if (argc != 4) {
+        cout << "Usage: encrypt <input_file> <output_file> <key>\n";
         return 1;
     }
-    RC4_CTX ctx;
-    rc4_init(&ctx, (const unsigned char *)key, strlen(key));
-    rc4_process(&ctx, (const unsigned char *)plaintext, cipher, textlen);
-    char *hex_out = (char *)malloc(2 * textlen + 1);
-    if (!hex_out) {
-        fprintf(stderr, "Memory allocation failed\n");
-        free(cipher);
+
+    ifstream fin(argv[1], ios::binary);
+    if (!fin) {
+        cout << "Cannot open input file.\n";
         return 1;
     }
-    hex_encode(cipher, textlen, hex_out);
-    printf("Ciphertext (hex): %s\n", hex_out);
-    free(cipher);
-    free(hex_out);
+
+    ofstream fout(argv[2], ios::binary);
+    if (!fout) {
+        cout << "Cannot create output file.\n";
+        return 1;
+    }
+
+    string key = argv[3];
+    vector<unsigned char> data((istreambuf_iterator<char>(fin)), istreambuf_iterator<char>());
+    fin.close();
+
+    RC4 rc4((unsigned char*)key.c_str(), key.length());
+    rc4.crypt(data.data(), data.size());
+
+    fout.write((char*)data.data(), data.size());
+    fout.close();
+
+    cout << "Encryption done successfully.\n";
     return 0;
 }
+
